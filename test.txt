@@ -1,0 +1,64 @@
+import csv
+import os
+
+from datetime import datetime
+
+#import MySQLdb
+
+category_dict = {}
+category_dict ['Entertainment'] = ['BEST BUY', 'RIOTGAM', 'THE SOURCE']
+category_dict ['Food'] = ['SUSHI', 'RESTAUR', 'CHICKE', 'SUBWAY', 'PIZZA', 'FRIES', 'BAGUETTE', 'MCDONALD', 'HORTONS', 'JACK ASTOR', 'TERIYAKI', 'BURGER', 'OLLY FRESCO']
+category_dict ['Groceries'] = ['FOOD BASIC', 'FRESHCO', 'METRO']
+category_dict ['Transportation'] = ['TTC', 'MEGABUS']
+category_dict ['Gas'] = ['PETROCAN', 'SHELL']
+
+cityList = ["TORONTO", "CAMBRIDGE", "KINGSTON"]
+
+#db = MySQLdb.connect(host="xlcaliburncom.ipagemysql.com",
+#                     user="abc",
+#                     passwd="abcde123",
+#                     db="testdb")
+
+fileList = [ f for f in os.listdir(".") if f.endswith(".csv") and f.startswith("accountactivity")]
+
+with open("output.csv", "w") as mf:
+    for fname in fileList: # for each file        
+        with open(fname, 'rb') as f:        
+            reader = csv.reader(f)
+            itemList = list(reader)
+
+        itemList = [x for x in itemList if not 'PAYMENT - THANK YOU' in x]
+
+        midItem = itemList[(len(itemList)+1)/2]
+        midDate = datetime.strptime(midItem[0], '%m/%d/%Y')
+        month = midDate.strftime("%B")
+        mf.write('///'+month+'\n')
+
+        for fline in itemList: # for each item
+            category = 'Other'
+            city = ''
+            
+            for cityitem in cityList:
+                if cityitem in fline[1]:
+                    city = cityitem
+                   
+            for key in category_dict:
+                for value in category_dict[key]:
+                    if value in fline[1]:
+                        category = key
+                        
+
+            fline.append(city)        
+            fline.append(category)
+            fline.append(midDate.strftime("%m"))
+
+            mf.write(str(fline)+'\n')
+
+    
+#INSERT INTO table_name (date, description, debit, credit, city, category)
+#VALUES (value1,value2,value3,...);
+
+
+#for f in fileList:
+    #os.remove(f)
+    #print f
