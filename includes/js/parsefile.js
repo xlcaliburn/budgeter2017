@@ -111,7 +111,6 @@
 
 		return description;
 	}
-console.log(categoryList);
 	function parseCategory(description, modifiedCategoryList) {
 		var category = 'Other';
 		var modifiedDescription = description.replace("\'", "_");

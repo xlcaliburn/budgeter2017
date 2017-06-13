@@ -22,7 +22,7 @@ window.onload = function() {
 			//fileDisplayArea.innerText = reader.result;
 			fileContents = reader.result;
 			var lines = fileContents.split('\n');
-			
+
 			var table = '<table border="1" cellspacing="1" cellpadding="5"><tr>\
 							<td>Date</td>\
 							<td>Description</td>\
@@ -43,11 +43,11 @@ window.onload = function() {
 			for(var i = 0;i < lines.length;i++) {
 				if (!!lines[i] && lines[i].indexOf("PAYMENT")== -1 ) {
 					var col = lines[i].split(',');
-					
+
 					date = Date.parse(col[0]);
 					//var date = parseDate.getDate();
 					description = parseDescription(col[1]);
-					debit = parseFloat(col[2]) || 0; 
+					debit = parseFloat(col[2]) || 0;
 					credit = parseFloat(col[3]) || 0;
 					category = parseCategory(col[1], modifiedCategoryList);
 
@@ -70,11 +70,11 @@ window.onload = function() {
 						groceries += debit;
 					}
 					else if (category === "Electronics") {
-						color = "#FF0066"
+						color = "#FF0066";
 						electronics += debit;
 					}
 					else if (category === "Other") {
-						color = "#CCCCCC"
+						color = "#CCCCCC";
 						other += debit;
 					}
 
@@ -92,15 +92,15 @@ window.onload = function() {
 			table += '</table>';
 			fileDisplayArea.innerHTML = table;
 
-			generateGraphs(food, transportation, entertainment, groceries, electronics, other); 
-		}	
+			generateGraphs(food, transportation, entertainment, groceries, electronics, other);
+		}
 
-		reader.readAsText(file);	
+		reader.readAsText(file);
 
 
 
 	});
-}
+};
 
 function parseDescription(description) {
 	city = parseCity(description);
@@ -115,7 +115,7 @@ function parseDescription(description) {
 }
 
 function parseCategory(description, modifiedCategoryList) {
-	var category = 'Other'
+	var category = 'Other';
 	var modifiedDescription = description.replace("\'", "_");
 
 	for (var i=0; i<categoryList.length; i++) {
@@ -124,13 +124,13 @@ function parseCategory(description, modifiedCategoryList) {
 			category = categoryList[i].category;
 			break;
 		}
-	}	
+	}
 	return category;
 
 }
 
 function parseCity(description) {
-	var city = ''
+	var city = '';
 	var citySubstr = description.slice(-9);
 	for (var i=0; i<cityList.length; i++) {
 		if (citySubstr.indexOf(cityList[i].city) > -1) {
